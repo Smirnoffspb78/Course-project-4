@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 /**
  * Группа для восхождения на гору.
  */
@@ -20,31 +22,32 @@ import java.util.Set;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name= "tb_groups_climbers")
+@Table(name = "tb_groups_climbers")
 public class GroupClimbers {
     /**
      * Идентификатор группы.
      */
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     @EqualsAndHashCode.Include
-    private long id;
+    private int id;
     /**
      * Гора.
      */
-    @NotNull
+    @NotNull(message = "mountain не должно быть null")
     @ManyToOne
     @JoinColumn(name = "mountain_id", updatable = false)
     private Mountain mountain;
     /**
      * Дата следующего похода.
      */
-    @NotNull
+    @NotNull (message = "start mountain не должно быть null")
     @Column(name = "start_date")
-    private LocalDate startClimbing;
+    private LocalDate start;
     /**
      * Максимальное количество человек в группе.
      */
-    @Positive
+    @Positive(message = "max_climbers должно быть положительным")
     @Column(name = "max_climbers")
     private int maxClimber;
     /**
@@ -55,30 +58,30 @@ public class GroupClimbers {
     /**
      * Стоимость.
      */
-    @Positive
+    @Positive (message = "price должно быть положительным")
     @Column(name = "price", nullable = false)
     private double price;
     /**
      * Руководитель похода.
      */
-    @NotNull
+    @NotNull(message = "supervisor не должно быть null")
     @ManyToOne
     @JoinColumn(name = "supervisor_id")
     private Supervisor supervisor;
     /**
      * Массив для записи альпинистов.
      */
-    @NotNull
+    @NotNull (message = "climbers не должно быть null")
     @ManyToMany
     @JoinTable(name = "tb_climber_group_climbers",
             joinColumns = @JoinColumn(name = "group_climbers_id"),
             inverseJoinColumns = @JoinColumn(name = "climber_id")
     )
-    private Set<Climber> climbers = new HashSet<>();
+    private Set<@NotNull Climber> climbers = new HashSet<>();
     /**
      * Дата окончания восхождения.
      */
-    @NotNull
+    @NotNull(message = "finish не должно быть null")
     @Column(name = "finish_date", nullable = false)
     private LocalDate finish;
 }

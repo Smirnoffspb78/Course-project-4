@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 public class CompositeKey {
-    private  Mountain mountain;
-    private  Climber climber;
+    private GroupClimbers groupClimbers;
+    private Climber climber;
 }

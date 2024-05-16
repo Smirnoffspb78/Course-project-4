@@ -23,13 +23,13 @@ import lombok.Setter;
 public class Reserve {
 
     /**
-     * Гора.
+     * Группа альпинистов.
      */
     @NotNull
     @Id
     @ManyToOne
-    @JoinColumn(name = "mountain_id", nullable = false)
-    private Mountain mountain;
+    @JoinColumn(name = "group_climbers_id", nullable = false)
+    private GroupClimbers groupClimbers;
     /**
      * Альпинист.
      */

@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Range;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -32,9 +31,9 @@ public class Climber {
     /**
      * Номер телефона.
      */
-    @Range(min = 10_000_000_000L, max = 99_999_999_999L, message = "Длина должна быть 11 символов")
-    @Column(name = "number_phone", unique = true, nullable = false)
-    private long numberPhone;
+    @NotBlank(message = "numberPhone не должен быть null и иметь хотя бы один не пробельный символ")
+    @Column(name = "number_phone", length = 11, unique = true, nullable = false)
+    private String numberPhone;
     /**
      * Имя.
      */

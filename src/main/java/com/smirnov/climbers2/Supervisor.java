@@ -1,13 +1,12 @@
 package com.smirnov.climbers2;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 /**
  * Руководитель похода.
@@ -22,6 +21,7 @@ public class Supervisor {
      * Идентификатор руководителя похода.
      */
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     @EqualsAndHashCode.Include
     private long id;
     /**
