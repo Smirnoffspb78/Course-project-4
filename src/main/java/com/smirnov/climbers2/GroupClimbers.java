@@ -12,17 +12,18 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 /**
  * Группа для восхождения на гору.
  */
-@ToString
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "tb_groups_climbers")
+@ToString
 public class GroupClimbers {
     /**
      * Идентификатор группы.
@@ -72,7 +73,7 @@ public class GroupClimbers {
      * Массив для записи альпинистов.
      */
     @NotNull (message = "climbers не должно быть null")
-    @ManyToMany
+    @ManyToMany(fetch = EAGER)
     @JoinTable(name = "tb_climber_group_climbers",
             joinColumns = @JoinColumn(name = "group_climbers_id"),
             inverseJoinColumns = @JoinColumn(name = "climber_id")

@@ -34,8 +34,8 @@ public class Supervisor {
      * Фамилия.
      */
     @NotBlank
-    @Column(name = "second_name", nullable = false, length = 100)
-    private String secondName;
+    @Column(name = "last_name", nullable = false, length = 100)
+    private String lastName;
     /**
      * Отчество.
      */

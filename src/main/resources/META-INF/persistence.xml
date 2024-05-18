@@ -6,6 +6,12 @@
 
     <persistence-unit name="climbers" transaction-type="RESOURCE_LOCAL">
         <class> com.smirnov.climbers2.Country </class>
+        <class> com.smirnov.climbers2.Climber </class>
+        <class> com.smirnov.climbers2.GroupClimbers </class>
+        <class> com.smirnov.climbers2.Mountain </class>
+        <class> com.smirnov.climbers2.RecordClimbing </class>
+        <class> com.smirnov.climbers2.Reserve </class>
+        <class> com.smirnov.climbers2.Supervisor </class>
 
 
 

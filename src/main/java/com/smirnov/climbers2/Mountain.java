@@ -45,7 +45,7 @@ public class Mountain {
      */
     @NotNull(message = "countrySet не должен быть null")
     @NotEmpty(message = "countrySet не должен быть пустым")
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tb_mountain_country",
             joinColumns = @JoinColumn(name = "mountain_id"),
             inverseJoinColumns = @JoinColumn(name = "country_id"))

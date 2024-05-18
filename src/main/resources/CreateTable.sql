@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS tb_climbers(
 id BIGSERIAL PRIMARY KEY,
 first_name VARCHAR(200) NOT NULL,
-second_name VARCHAR(200) NOT NULL,
+last_name VARCHAR(200) NOT NULL,
 number_phone varchar(11) NOT NULL UNIQUE,
 email VARCHAR(200) NOT NULL
 );
@@ -61,8 +61,8 @@ CREATE TABLE IF NOT EXISTS tb_climber_group_climbers(
 
 --Резерв (выражается через связь многие ко многим) - один альпинист не может несколько раз попасть в резерв на одну гору
 CREATE TABLE tb_reserve(
-        climber_id BIGINT not null,
         group_climbers_id INT not null,
+        climber_id BIGINT not null,
         primary key (climber_id, group_climbers_id),
 	FOREIGN KEY (climber_id) REFERENCES tb_climbers(id),
 	FOREIGN KEY (group_climbers_id) REFERENCES tb_groups_climbers(id)

@@ -9,8 +9,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.lang.Long.parseLong;
 
 /**
  * Альпинист.
@@ -20,6 +22,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "tb_climbers")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 public class Climber {
     /**
      * Идентификатор альпиниста.
@@ -44,12 +47,28 @@ public class Climber {
      * Фамилия.
      */
     @NotBlank(message = "secondName не должно быть null и иметь хотя бы один не пробельный символ")
-    @Column(name = "second_name", nullable = false, length = 200)
-    private String secondName;
+    @Column(name = "last_name", nullable = false, length = 200)
+    private String lastName;
     /**
      * email.
      */
     @NotBlank(message = "email не должно быть null и содержать хотя бы один не пробельный символ")
     @Column(name = "email", nullable = false, length = 200)
     private String email;
+
+    public void setNumberPhone(@NotBlank String numberPhone) {
+        try {
+            parseLong(numberPhone);
+        } catch (NumberFormatException nfe) {
+            throw new NumberFormatException("Телефон должен состоять только из цифр");
+        }
+        if (numberPhone.replaceAll("\\W", "").length()!=11 || numberPhone.length() != 11) {
+            throw new IllegalArgumentException("Длина номер телефона должна составлять 11 символов и не содержать других символов");
+        }
+        this.numberPhone = numberPhone;
+    }
+
+    public void setEmail(@NotBlank String email) {
+        this.email = email;
+    }
 }
