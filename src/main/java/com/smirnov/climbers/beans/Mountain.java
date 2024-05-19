@@ -1,4 +1,4 @@
-package com.smirnov.climbers2;
+package com.smirnov.climbers.beans;
 
 
 import jakarta.persistence.*;
@@ -35,7 +35,7 @@ public class Mountain {
     @Column(name = "mountain_name", nullable = false, length = 150, updatable = false)
     private String mountainName;
     /**
-     * Высота горы, [м]
+     * Высота горы, [м].
      */
     @Min(value = 100, message = "Высота горы не должна быть меньше 100м")
     @Column(name = "height", nullable = false, updatable = false)

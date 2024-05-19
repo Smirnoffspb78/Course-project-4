@@ -72,8 +72,8 @@ CREATE TABLE tb_reserve(
 CREATE TABLE IF NOT EXISTS tb_records_climbing(
 id SERIAL PRIMARY KEY,
 group_climbers_id INT NOT NULL,
-start_climbing DATE NOT NULL,
-end_climbing DATE NOT NULL,
+start DATE NOT NULL,
+finish DATE NOT NULL,
 count_climbers INTEGER NOT NULL,
 FOREIGN KEY (group_climbers_id) REFERENCES tb_groups_climbers(id)
 );

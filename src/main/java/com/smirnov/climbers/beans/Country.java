@@ -1,4 +1,4 @@
-package com.smirnov.climbers2;
+package com.smirnov.climbers.beans;
 
 
 import jakarta.persistence.Column;
