@@ -3,7 +3,7 @@ package com.smirnov.climbers.daobean;
 import lombok.Getter;
 
 /**
- *Содержит запросы к клубу альпинистов.
+ * Содержит запросы к клубу альпинистов.
  */
 @Getter
 public enum QueriesClimberClub {
@@ -11,15 +11,16 @@ public enum QueriesClimberClub {
      * Возвращает список групп, открытых для записи.
      */
     GET_GROUP_OPEN_RECORD("""
-            SELECT tb_groups_climbers.*
-            FROM tb_groups_climbers
-            WHERE tb_groups_climbers.is_open=true
+            SELECT gc
+            FROM GroupClimbers gc
+            WHERE gc.isOpen=true
             """),
     /**
      * Возвращает список названий гор, и количество альпинистов, покоривших ее.
      */
 
-    GET_MOUNTAIN_NAME_AND_COUNT_CLIMBER("""
+    GET_MOUNTAIN_NAME_AND_COUNT_CLIMBER(
+            """
             SELECT tb_mountains.mountain_name
             FROM tb_mountains
             JOIN  tb_groups_climbers ON tb_groups_climbers.mountain_id=tb_mountains.id
@@ -32,19 +33,31 @@ public enum QueriesClimberClub {
      * Возвращает фамилии и email альпинистов в отсортированном по фамилии виде, которые не совершали восхождений за последний год. +++++++
      */
     GET_SECOND_NAME_AND_EMAIL_CLIMBER("""
-            SELECT DISTINCT tb_climbers.last_name, tb_climbers.email
-            FROM tb_records_climbing
-            JOIN tb_groups_climbers ON tb_records_climbing.group_climbers_id=tb_groups_climbers.id
-            JOIN tb_climber_group_climbers ON tb_climber_group_climbers.group_climbers_id=tb_groups_climbers.id
-            RIGHT JOIN tb_climbers ON tb_climber_group_climbers.climber_id=tb_climbers.id
-            WHERE tb_records_climbing.finish IS NULL OR tb_records_climbing.finish < ?
+            SELECT tb_climbers.last_name, tb_climbers.email
+            FROM tb_climbers
+            LEFT JOIN tb_climber_group_climbers ON tb_climber_group_climbers.climber_id=tb_climbers.id
+            LEFT JOIN tb_groups_climbers ON tb_climber_group_climbers.group_climbers_id=tb_groups_climbers.id
+            LEFT JOIN tb_records_climbing ON tb_records_climbing.group_climbers_id=tb_groups_climbers.id
+            GROUP BY tb_climbers.id HAVING MAX(tb_records_climbing.finish) IS NULL
+            OR MAX(tb_records_climbing.finish)<'?'
             ORDER BY tb_climbers.last_name
             LIMIT ? OFFSET ?"""),
 
     /**
      * По ФИО руководителя выводит идентификаторы групп, где количество покоривших гору больше заданного значения.
      */
-    GET_ID_GROUP_BY_SUPERVISOR("""
+    GET_ID_GROUP_BY_SUPERVISOR
+            ("""
+             SELECT DISTINCT sv.id
+             FROM RecordClimbing trc
+             JOIN trc.groupClimbers tgc
+             JOIN tgc.supervisor sv
+             WHERE sv.firstName ILIKE ?1
+             AND sv.lastName ILIKE ?2
+             AND sv.surName ILIKE ?3
+             AND trc.countClimbers> ?4
+             """
+                    /*"""
             SELECT DISTINCT tb_groups_climbers.id
             FROM tb_groups_climbers
             JOIN tb_supervisors ON tb_supervisors.id=tb_groups_climbers.supervisor_id
@@ -53,17 +66,18 @@ public enum QueriesClimberClub {
             AND last_name ILIKE ?
             AND surname ILIKE ?
             AND tb_records_climbing.count_climbers>?
-            """),
+            """*/),
 
     /**
      * Возвращает список восхождений, которые осуществлялись в заданный период времени.
      **/
     GET_RECORD_CLIMBING_BY_INTERVAL("""
-            SELECT tb_records_climbing.*
-            FROM tb_records_climbing
-            WHERE finish > ? OR start < ?
-            LIMIT ? OFFSET ?
+            SELECT rc
+            FROM RecordClimbing rc
+            WHERE (rc.finish <= ?1 AND rc.finish >= ?2)
+            OR (rc.start <= ?3 AND rc.start>= ?4)
             """),
+
     /**
      * Возвращает список походов альпиниста в заданный период времени
      */
@@ -74,8 +88,7 @@ public enum QueriesClimberClub {
             "JOIN tb_groups_climbers ON tb_groups_climbers.id=tb_climber_group_climbers.group_climbers_id
             "WHERE tb_climbers.id=?
             "AND (tb_groups_climbers.start_date>=? AND tb_groups_climbers.finish_date<=?)
-            """)
-    ;
+            """);
     /**
      * Описание запроса.
      */
@@ -83,24 +96,12 @@ public enum QueriesClimberClub {
 
     /**
      * Конструктор создает запрос в БД.
+     *
      * @param querySQL Описание запроса.
      */
     QueriesClimberClub(String querySQL) {
         this.querySQL = querySQL;
     }
 }
-
-/*
-
-SELECT tb_climbers.last_name, tb_climbers.email, --tb_records_climbing.finish,
-(SELECT tb_records_climbing.finish FROM tb_records_climbing
-WHERE tb_records_climbing.finish<'2023-05-17')
-FROM tb_records_climbing
-JOIN tb_groups_climbers ON tb_records_climbing.group_climbers_id=tb_groups_climbers.id
-JOIN tb_climber_group_climbers ON tb_climber_group_climbers.group_climbers_id=tb_groups_climbers.id
-RIGHT JOIN tb_climbers ON tb_climber_group_climbers.climber_id=tb_climbers.id
-WHERE tb_records_climbing.finish IS NULL
-ORDER BY tb_climbers.last_name
- */
 
 

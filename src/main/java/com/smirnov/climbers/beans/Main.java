@@ -1,6 +1,7 @@
 package com.smirnov.climbers.beans;
 
 import com.smirnov.climbers.daobean.*;
+import jakarta.persistence.Temporal;
 
 import java.time.LocalDate;
 import java.util.regex.Matcher;
@@ -10,7 +11,7 @@ import static jakarta.persistence.Persistence.createEntityManagerFactory;
 
 public class Main {
     public static void main(String[] args) {
-        //Создание странs, Добавление, извлечение
+        //Создание страны, Добавление, извлечение
         Country germany = new Country();
         germany.setNameCountry("Германия");
         CountriesDao countriesDao=new CountriesDao("climbers");
@@ -49,10 +50,11 @@ public class Main {
         //System.out.println(recordsDao.selectById(4));
 
 
-        /*////////////////////////////РЕЗУЛЬТАТЫ ТЕСТОВЫХ ЗАПРОСОВ///////////////////////////////
-        System.out.println("Список групп, которые открыты");
+        ////////////////////////////РЕЗУЛЬТАТЫ ТЕСТОВЫХ ЗАПРОСОВ///////////////////////////////
+       /* System.out.println("Список групп, которые открыты");
         GroupClimbersDao groupClimbersDao = new GroupClimbersDao("climbers");
-        groupClimbersDao.getGroupClimbersIsOpen();
+        System.out.println(groupClimbersDao.getGroupClimbersIsOpen());
+
 
 
         System.out.println("Список названий гор, где количество покоривших ее больше заданного значения");
@@ -60,7 +62,7 @@ public class Main {
         System.out.println(mountainsDao.mountainsWithClimber(4));
 
         System.out.println("Отсортированный список альпинистов, которые не осуществляли походы за последний год");
-        System.out.println(climbersDao.climbersSortSecondNameNotClimbingInLastYear(20));
+        System.out.println(climbersDao.climbersSortSecondNameNotClimbingInLastYear(20));*/
 
 
         System.out.println("Идентификаторы групп по ФИО руководителя, где количество покоривших гору больше определенного значени");
@@ -68,7 +70,7 @@ public class Main {
         System.out.println(supervisorDao.getGroupByFSS("Алексей", "Соболев", "Игоревич", 1));
 
         System.out.println("Походы, которые осуществлялись в заданный период времени");
-        System.out.println( recordsDao.recordsClimbingPeriod(10, LocalDate.now().minusMonths(6), LocalDate.now()));*/
+        System.out.println( recordsDao.recordsClimbingPeriod(10, LocalDate.now().minusMonths(1), LocalDate.now()));
 
 
 

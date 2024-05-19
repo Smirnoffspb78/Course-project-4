@@ -28,7 +28,7 @@ public class ReserveDao extends Dao<ReserveId, Reserve> {
      * @return Запись о совершенном восхождении
      */
     @Override
-    Reserve selectById(ReserveId reserveId) {
+    Reserve findById(ReserveId reserveId) {
         validate(reserveId);
         Reserve reserve = new Reserve();
         reserve.setReserveId(reserveId);
@@ -68,6 +68,6 @@ public class ReserveDao extends Dao<ReserveId, Reserve> {
         ReserveId reserveId = new ReserveId();
         reserveId.setGroupClimbers(groupClimbers);
         reserveId.setClimber(climber);
-        return selectById(reserveId);
+        return findById(reserveId);
     }
 }

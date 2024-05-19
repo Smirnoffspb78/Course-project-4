@@ -30,9 +30,9 @@ public class MountainsDao extends Dao<Integer, Mountain> {
      * @return Альпинист
      */
     @Override
-    public Mountain selectById(@NotNull Integer id) {
+    public Mountain findById(@NotNull Integer id) {
         validate(id);
-        try (EntityManagerFactory factory = createEntityManagerFactory("climbers")) {
+        try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();
                 return manager.find(Mountain.class, id);

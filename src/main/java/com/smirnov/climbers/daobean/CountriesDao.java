@@ -20,7 +20,7 @@ public class CountriesDao extends Dao<String, Country> {
      * @return Альпинист
      */
     @Override
-    public Country selectById(@NotNull String name) {
+    public Country findById(@NotNull String name) {
         validate(name);
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {

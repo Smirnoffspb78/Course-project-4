@@ -20,7 +20,7 @@ public abstract class Dao<T, E> {
      * Конструктор задает базовые параметры для Dao классов
      * @param nameEntityManager Имя Entity Manager.
      */
-    Dao(String nameEntityManager) {
+    protected Dao(String nameEntityManager) {
         validate(nameEntityManager);
         this.nameEntityManager = nameEntityManager;
     }
@@ -30,7 +30,7 @@ public abstract class Dao<T, E> {
      * @param t идентификатор из БД.
      * @return Объект.
      */
-    abstract E selectById(T t);
+    abstract E findById(T t);
 
     /**
      * Добавляет объекты в БД по идентификатору.

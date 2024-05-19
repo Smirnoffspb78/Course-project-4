@@ -55,7 +55,7 @@ public class GroupClimbers {
      * Указывает открыт ли набор в группу.
      */
     @Column(name = "is_open", nullable = false)
-    private boolean isRecruitOpened;
+    private boolean isOpen;
     /**
      * Стоимость.
      */

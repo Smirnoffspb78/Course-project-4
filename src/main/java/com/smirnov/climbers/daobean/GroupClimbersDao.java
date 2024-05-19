@@ -21,6 +21,7 @@ import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_CLIMBING_CLIMB
 import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_GROUP_OPEN_RECORD;
 import static jakarta.persistence.Persistence.createEntityManagerFactory;
 
+import static java.time.LocalDate.now;
 import static java.util.logging.Logger.getLogger;
 
 public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
@@ -37,7 +38,7 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
      * @return Альпинист
      */
     @Override
-    public GroupClimbers selectById(@NotNull Integer id) {
+    public GroupClimbers findById(@NotNull Integer id) {
         validate(id);
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
@@ -75,8 +76,8 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();
-                TypedQuery<GroupClimbers> getGroupClimberIsOpen = (TypedQuery<GroupClimbers>) manager
-                        .createNativeQuery(GET_GROUP_OPEN_RECORD.getQuerySQL(), GroupClimbers.class);
+                TypedQuery<GroupClimbers> getGroupClimberIsOpen
+                        = manager.createQuery(GET_GROUP_OPEN_RECORD.getQuerySQL(), GroupClimbers.class);
                 return getGroupClimberIsOpen.getResultList();
             }
         }
@@ -93,9 +94,9 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
             throw new IllegalArgumentException("idClimber и idGroup должны быть положительными");
         }
         ClimbersDao climbersDao = new ClimbersDao(nameEntityManagerClimber);
-        Climber climber = climbersDao.selectById(idClimber);
-        GroupClimbers groupClimbers = selectById(idGroup);
-        if (!groupClimbers.isRecruitOpened()) {
+        Climber climber = climbersDao.findById(idClimber);
+        GroupClimbers groupClimbers = findById(idGroup);
+        if (!groupClimbers.isOpen()) {
             logger.info("Набор закрыт.");
             ReserveDao reserveDao = new ReserveDao(nameEntityManagerReserve);
             reserveDao.insert(reserveDao.createReserveByGroupAndClimber(groupClimbers, climber));
@@ -122,7 +123,7 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
         }
         groupClimbers.getClimbers().add(climber);
         if (groupClimbers.getClimbers().size() == groupClimbers.getMaxClimber()) {
-            groupClimbers.setRecruitOpened(false);
+            groupClimbers.setOpen(false);
         }
         //Запрос на обновление группы
         try (EntityManagerFactory factory = createEntityManagerFactory("climbers")) {
@@ -134,4 +135,13 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
             }
         }
     }
+
+    /*public List<Integer> updateStatus() {
+        List<GroupClimbers> currentList = getGroupClimbersIsOpen();
+        List<Integer> updateList; *//*= currentList.stream()
+                .filter(current -> !current.getStart().isBefore(now()))
+                .map(current-> current.setRecruitOpened(false))*//*
+
+        return updateList;
+    }*/
 }

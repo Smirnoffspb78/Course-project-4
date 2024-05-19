@@ -1,18 +1,14 @@
 package com.smirnov.climbers.daobean;
 
-import com.smirnov.climbers.C3P0pool;
 import com.smirnov.climbers.beans.Climber;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.PersistenceException;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +37,7 @@ public class ClimbersDao extends Dao<Long, Climber> {
      * @return Альпинист
      */
     @Override
-    public Climber selectById(@NotNull Long id) {
+    public Climber findById(@NotNull Long id) {
         validate(id);
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
@@ -68,6 +64,7 @@ public class ClimbersDao extends Dao<Long, Climber> {
             throw new IllegalArgumentException("Для добавления в БД имя должно начинаться с заглавной латинской или русской буквы, " +
                     "остальные символы должны быть подстрочные буквы. Номер телефона должен состоять из 11 пробельных символов");
         }
+        //super.insert()
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();
