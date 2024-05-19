@@ -1,7 +1,7 @@
 package com.smirnov.climbers;
 
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
+import jakarta.validation.ValidationException;
 import jakarta.validation.ValidatorFactory;
 
 import java.util.Set;
@@ -21,13 +21,10 @@ public class ValidateObjects {
 
     public static <T> void validate(T t) {
         try (ValidatorFactory factory = buildDefaultValidatorFactory()) {
-            Validator validator = factory.getValidator();
-            Set<ConstraintViolation<T>> violations = validator.validate(t);
+            Set<ConstraintViolation<T>> violations = factory.getValidator().validate(t);
             if (!violations.isEmpty()) {
-                for (ConstraintViolation<T> violation : violations) {
-                    LOGGER.warning(violation.getMessage());
-                }
-                throw new IllegalArgumentException();
+                violations.forEach(violation -> LOGGER.warning(violation.getMessage()));
+                throw new ValidationException("Объект имеет невалидные значения.");
             }
         }
     }

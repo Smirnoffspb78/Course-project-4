@@ -1,5 +1,9 @@
-package com.smirnov.climbers.beans;
+package com.smirnov.climbers;
 
+import com.smirnov.climbers.beans.Climber;
+import com.smirnov.climbers.beans.Country;
+import com.smirnov.climbers.beans.GroupClimbers;
+import com.smirnov.climbers.beans.RecordClimbing;
 import com.smirnov.climbers.daobean.*;
 import jakarta.persistence.Temporal;
 
@@ -11,6 +15,11 @@ import static jakarta.persistence.Persistence.createEntityManagerFactory;
 
 public class Main {
     public static void main(String[] args) {
+        //Обновление статуса в начале каждого запуска
+        GroupClimbersDao groupClimbersDao=new GroupClimbersDao("climbers");
+        groupClimbersDao.updateStatus();
+
+
         //Создание страны, Добавление, извлечение
         Country germany = new Country();
         germany.setNameCountry("Германия");
@@ -52,7 +61,6 @@ public class Main {
 
         ////////////////////////////РЕЗУЛЬТАТЫ ТЕСТОВЫХ ЗАПРОСОВ///////////////////////////////
         System.out.println("Список групп, которые открыты");
-        GroupClimbersDao groupClimbersDao = new GroupClimbersDao("climbers");
         System.out.println(groupClimbersDao.getGroupClimbersIsOpen());
 
 
@@ -71,10 +79,6 @@ public class Main {
 
         System.out.println("Походы, которые осуществлялись в заданный период времени");
         System.out.println( recordsDao.recordsClimbingPeriod(10, LocalDate.now().minusMonths(1), LocalDate.now()));
-
-
-
-
     }
 
 }

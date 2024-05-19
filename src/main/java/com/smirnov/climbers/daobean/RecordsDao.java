@@ -73,14 +73,13 @@ public class RecordsDao extends Dao<Integer, RecordClimbing> {
         }
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
-                List<RecordClimbing> recordsClimbings = new ArrayList<>();
-                TypedQuery<RecordClimbing> query
-                        = manager.createQuery(GET_RECORD_CLIMBING_BY_INTERVAL.getQuerySQL(), RecordClimbing.class);
-                query.setParameter(1, finish);
-                query.setParameter(2, start);
-                query.setParameter(3, finish);
-                query.setParameter(4, start);
-                return query.getResultList();
+                return manager.createQuery(GET_RECORD_CLIMBING_BY_INTERVAL.getQuerySQL(), RecordClimbing.class)
+                        .setParameter(1, finish)
+                        .setParameter(2, start)
+                        .setParameter(3, finish)
+                        .setParameter(4, start)
+                        .getResultList();
+
             }
         }
     }

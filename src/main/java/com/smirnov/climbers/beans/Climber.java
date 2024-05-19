@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,17 +37,22 @@ public class Climber {
      */
     @NotBlank(message = "numberPhone не должен быть null и иметь хотя бы один не пробельный символ")
     @Column(name = "number_phone", length = 11, unique = true, nullable = false)
+    @Pattern(regexp = "^\\d{11}$", message = "Номер телефона должен состоять из 11 пробельных символов\"")
     private String numberPhone;
     /**
      * Имя.
      */
     @NotBlank(message = "firstName не должно быть null и иметь хотя бы один не пробельный символ")
+    @Pattern(regexp = "^[A-Z][a-z]{0,199}$|^[А-Я][а-я]{0,199}$|",
+    message = "Имя должно начинаться с заглавной латинской или русской буквы, остальные символы должны быть подстрочные буквы")
     @Column(name = "first_name", nullable = false, length = 200)
     private String firstName;
     /**
      * Фамилия.
      */
     @NotBlank(message = "secondName не должно быть null и иметь хотя бы один не пробельный символ")
+    @Pattern(regexp = "^[A-Z][a-z]{0,199}$|^[А-Я][а-я]{0,199}$|",
+            message = "Фамилия должна начинаться с заглавной латинской или русской буквы остальные символы должны быть подстрочные буквы")
     @Column(name = "last_name", nullable = false, length = 200)
     private String lastName;
     /**

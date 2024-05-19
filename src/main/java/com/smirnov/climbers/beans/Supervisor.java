@@ -2,6 +2,7 @@ package com.smirnov.climbers.beans;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,18 +29,27 @@ public class Supervisor {
      * Имя.
      */
     @NotBlank
+    @Pattern(regexp = "^[A-Z][a-z]{0,199}$|^[А-Я][а-я]{0,199}$|",
+            message = "Для добавления в БД имя должно начинаться с заглавной латинской или русской буквы, " +
+                    "остальные символы должны быть подстрочные буквы")
     @Column(name = "first_name", nullable = false, length = 100)
     private String firstName;
     /**
      * Фамилия.
      */
     @NotBlank
+    @Pattern(regexp = "^[A-Z][a-z]{0,199}$|^[А-Я][а-я]{0,199}$|",
+            message = "Для добавления в БД имя должно начинаться с заглавной латинской или русской буквы, " +
+                    "остальные символы должны быть подстрочные буквы")
     @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
     /**
      * Отчество.
      */
     @NotBlank
+    @Pattern(regexp = "^[A-Z][a-z]{0,199}$|^[А-Я][а-я]{0,199}$|",
+            message = "Для добавления в БД имя должно начинаться с заглавной латинской или русской буквы, " +
+                    "остальные символы должны быть подстрочные буквы")
     @Column(name = "surname", nullable = false, length = 100)
     private String surName;
 }

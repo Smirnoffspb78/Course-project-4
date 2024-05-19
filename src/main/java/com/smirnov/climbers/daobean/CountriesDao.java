@@ -16,7 +16,7 @@ public class CountriesDao extends Dao<String, Country> {
     /**
      * Извлекает страну из базы данных.
      *
-     * @param id идентификатор альпиниста
+     * @param name идентификатор альпиниста
      * @return Альпинист
      */
     @Override

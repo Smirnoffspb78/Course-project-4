@@ -1,28 +1,25 @@
 package com.smirnov.climbers.daobean;
 
-import com.smirnov.climbers.C3P0pool;
 import com.smirnov.climbers.beans.Climber;
 import com.smirnov.climbers.beans.GroupClimbers;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.TypedQuery;
 import jakarta.validation.constraints.NotNull;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import static com.smirnov.climbers.ValidateObjects.validate;
-import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_CLIMBING_CLIMBER_FOR_PERIOD;
-import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_GROUP_OPEN_RECORD;
+import static com.smirnov.climbers.daobean.QueriesClimberClub.*;
 import static jakarta.persistence.Persistence.createEntityManagerFactory;
 
+import static java.time.LocalDate.now;
 import static java.util.logging.Logger.getLogger;
 
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
     private final Logger logger = getLogger(GroupClimbersDao.class.getName());
 
@@ -75,9 +72,7 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();
-                TypedQuery<GroupClimbers> getGroupClimberIsOpen
-                        = manager.createQuery(GET_GROUP_OPEN_RECORD.getQuerySQL(), GroupClimbers.class);
-                return getGroupClimberIsOpen.getResultList();
+                return manager.createQuery(GET_GROUP_OPEN_RECORD.getQuerySQL(), GroupClimbers.class).getResultList();
             }
         }
     }
@@ -106,27 +101,21 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
             logger.info("Вы уже находитесь в этой группе");
             return false;
         }
-        try (Connection connection = C3P0pool.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(GET_CLIMBING_CLIMBER_FOR_PERIOD.getQuerySQL())) {
-                statement.setLong(1, idClimber);
-                statement.setObject(2, groupClimbers.getStart());
-                statement.setObject(3, groupClimbers.getFinish());
-                ResultSet resultSet = statement.executeQuery();
-                if (resultSet.next()) {
+        try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
+            try (EntityManager manager = factory.createEntityManager()) {
+                List<String> query = manager.createNativeQuery(GET_CLIMBING_CLIMBER_FOR_PERIOD.getQuerySQL(), String.class)
+                        .setParameter(1, idClimber)
+                        .setParameter(2, groupClimbers.getStart())
+                        .setParameter(3, groupClimbers.getFinish())
+                        .getResultList();
+                if (!query.isEmpty()) {
                     logger.info("У вас уже есть походы в эти даты");
                     return false;
                 }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        groupClimbers.getClimbers().add(climber);
-        if (groupClimbers.getClimbers().size() == groupClimbers.getMaxClimber()) {
-            groupClimbers.setOpen(false);
-        }
-        //Запрос на обновление группы
-        try (EntityManagerFactory factory = createEntityManagerFactory("climbers")) {
-            try (EntityManager manager = factory.createEntityManager()) {
+                groupClimbers.getClimbers().add(climber);
+                if (groupClimbers.getClimbers().size() == groupClimbers.getMaxClimber()) {
+                    groupClimbers.setOpen(false);
+                }
                 manager.getTransaction().begin();
                 manager.merge(groupClimbers);
                 manager.getTransaction().commit();
@@ -135,12 +124,23 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
         }
     }
 
-    /*public List<Integer> updateStatus() {
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void updateStatus() {
         List<GroupClimbers> currentList = getGroupClimbersIsOpen();
-        List<Integer> updateList; *//*= currentList.stream()
-                .filter(current -> !current.getStart().isBefore(now()))
-                .map(current-> current.setRecruitOpened(false))*//*
-
-        return updateList;
-    }*/
+        if (!currentList.isEmpty()) {
+            List<GroupClimbers> updateList = new ArrayList<>();
+            currentList.stream().filter(groupClimbers -> !groupClimbers.getStart().isBefore(now()))
+                    .forEach(groupClimbers -> {
+                        groupClimbers.setOpen(false);
+                        updateList.add(groupClimbers);
+                    });
+            try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
+                try (EntityManager manager = factory.createEntityManager()) {
+                    manager.getTransaction().begin();
+                    updateList.forEach(manager::merge);
+                    manager.getTransaction().commit();
+                }
+            }
+        }
+    }
 }

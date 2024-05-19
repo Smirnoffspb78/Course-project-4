@@ -28,7 +28,7 @@ public class ReserveDao extends Dao<ReserveId, Reserve> {
      * @return Запись о совершенном восхождении
      */
     @Override
-    Reserve findById(ReserveId reserveId) {
+    Reserve findById(@NotNull ReserveId reserveId) {
         validate(reserveId);
         Reserve reserve = new Reserve();
         reserve.setReserveId(reserveId);
@@ -42,7 +42,7 @@ public class ReserveDao extends Dao<ReserveId, Reserve> {
      * @return составной первичный ключ
      */
     @Override
-    public ReserveId insert(Reserve reserve) {
+    public ReserveId insert(@NotNull Reserve reserve) {
         validate(reserve);
         try (EntityManagerFactory factory = createEntityManagerFactory("climbers")) {
             try (EntityManager manager = factory.createEntityManager()) {
