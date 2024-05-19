@@ -5,13 +5,13 @@
              version="2.0">
 
     <persistence-unit name="climbers" transaction-type="RESOURCE_LOCAL">
-        <class> com.smirnov.climbers2.Country </class>
-        <class> com.smirnov.climbers2.Climber </class>
-        <class> com.smirnov.climbers2.GroupClimbers </class>
-        <class> com.smirnov.climbers2.Mountain </class>
-        <class> com.smirnov.climbers2.RecordClimbing </class>
-        <class> com.smirnov.climbers2.Reserve </class>
-        <class> com.smirnov.climbers2.Supervisor </class>
+        <class>com.smirnov.climbers.beans.Country</class>
+        <class>com.smirnov.climbers.beans.Climber</class>
+        <class>com.smirnov.climbers.beans.GroupClimbers</class>
+        <class>com.smirnov.climbers.beans.Mountain</class>
+        <class>com.smirnov.climbers.beans.RecordClimbing</class>
+        <class>com.smirnov.climbers.beans.Reserve</class>
+        <class>com.smirnov.climbers.beans.Supervisor</class>
 
 
 
