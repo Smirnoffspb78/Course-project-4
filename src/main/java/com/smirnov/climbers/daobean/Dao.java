@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 import static com.smirnov.climbers.ValidateObjects.validate;
+
 /**
  * Базовый класс для методов Dao объектов.
  */
@@ -18,6 +19,7 @@ public abstract class Dao<T, E> {
 
     /**
      * Конструктор задает базовые параметры для Dao классов
+     *
      * @param nameEntityManager Имя Entity Manager.
      */
     protected Dao(@NotBlank String nameEntityManager) {
@@ -27,15 +29,17 @@ public abstract class Dao<T, E> {
 
     /**
      * Извлекает объекты из БД.
+     *
      * @param t идентификатор из БД.
      * @return Объект.
      */
-    abstract E findById(T t);
+    public abstract E findById(T t);
 
     /**
      * Добавляет объекты в БД по идентификатору.
+     *
      * @param e Идентификатор
      * @return Объект
      */
-    abstract T insert(E e);
+    public abstract T insert(E e);
 }

@@ -13,7 +13,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static java.lang.Long.parseLong;
 
 /**
  * Альпинист.
@@ -44,7 +43,7 @@ public class Climber {
      */
     @NotBlank(message = "firstName не должно быть null и иметь хотя бы один не пробельный символ")
     @Pattern(regexp = "^[A-Z][a-z]{0,199}$|^[А-Я][а-я]{0,199}$",
-    message = "Имя должно начинаться с заглавной латинской или русской буквы, остальные символы должны быть подстрочные буквы")
+            message = "Имя должно начинаться с заглавной латинской или русской буквы, остальные символы должны быть подстрочные буквы")
     @Column(name = "first_name", nullable = false, length = 200)
     private String firstName;
     /**

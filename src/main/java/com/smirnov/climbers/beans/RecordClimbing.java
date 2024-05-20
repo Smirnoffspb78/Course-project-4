@@ -42,7 +42,7 @@ public class RecordClimbing {
      */
     @NotNull(message = "groupClimbers не должен быть null")
     @ManyToOne
-    @JoinColumn(name = "group_climbers_id", nullable = false)
+    @JoinColumn(name = "group_climbers_id", nullable = false, unique = true)
     private GroupClimbers groupClimbers;
     /**
      * Дата начала восхождения.
@@ -65,5 +65,4 @@ public class RecordClimbing {
     @Positive
     @Column(name = "count_climbers", nullable = false)
     private int countClimbers;
-
 }

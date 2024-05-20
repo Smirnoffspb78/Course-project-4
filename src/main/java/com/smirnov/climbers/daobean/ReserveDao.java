@@ -1,13 +1,10 @@
 package com.smirnov.climbers.daobean;
 
-import com.smirnov.climbers.beans.Climber;
-import com.smirnov.climbers.beans.GroupClimbers;
-import com.smirnov.climbers.beans.Reserve;
-import com.smirnov.climbers.beans.ReserveId;
+import com.smirnov.climbers.beans.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import static com.smirnov.climbers.ValidateObjects.validate;
@@ -21,36 +18,14 @@ public class ReserveDao extends Dao<ReserveId, Reserve> {
         super(nameEntityManager);
     }
 
-    /**
-     * Извлекает запись по Id.
-     *
-     * @param reserveId Составной первичный ключ
-     * @return Запись о совершенном восхождении
-     */
-    @Override
-    Reserve findById(@NotNull ReserveId reserveId) {
-        validate(reserveId);
-        Reserve reserve = new Reserve();
-        reserve.setReserveId(reserveId);
-        return reserve;
-    }
-
-    /**
-     * Добавляет запись резерва в резерв.
-     *
-     * @param reserve Резерв
-     * @return составной первичный ключ
-     */
-    @Override
-    public ReserveId insert(@NotNull Reserve reserve) {
-        validate(reserve);
+    public boolean checkReserve(ReserveId reserveId) {
         try (EntityManagerFactory factory = createEntityManagerFactory("climbers")) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();
-                manager.persist(reserve);
-                manager.getTransaction().commit();
-                logger.info("вы добавлены в резерв");
-                return reserve.getReserveId();
+                List<Reserve> reserves = manager.createNativeQuery("SELECT * FROM tb_reserve", Reserve.class).getResultList();
+                Reserve reserve = new Reserve();
+                reserve.setReserveId(reserveId);
+                return reserves.contains(reserve);
             }
         }
     }
@@ -62,12 +37,48 @@ public class ReserveDao extends Dao<ReserveId, Reserve> {
      * @param climber       Альпинист
      * @return резерв
      */
-    public Reserve createReserveByGroupAndClimber(@NotNull GroupClimbers groupClimbers, @NotNull Climber climber) {
+    public Reserve createReserveByGroupAndClimber(GroupClimbers groupClimbers, Climber climber) {
         validate(groupClimbers);
         validate(climber);
-        ReserveId reserveId = new ReserveId();
-        reserveId.setGroupClimbers(groupClimbers);
-        reserveId.setClimber(climber);
-        return findById(reserveId);
+        Reserve reserve=new Reserve();
+        reserve.setReserveId(new ReserveId(groupClimbers, climber));
+        return reserve;
+    }
+
+    /**
+     * Извлекает запись по Id.
+     *
+     * @param reserveId Составной первичный ключ
+     * @return Запись о совершенном восхождении
+     */
+    @Override
+    public Reserve findById(ReserveId reserveId) {
+        validate(reserveId);
+        try (EntityManagerFactory factory = createEntityManagerFactory("climbers")) {
+            try (EntityManager manager = factory.createEntityManager()) {
+                manager.getTransaction().begin();
+                return manager.find(Reserve.class, reserveId);
+            }
+        }
+    }
+
+    /**
+     * Добавляет запись резерва в резерв.
+     *
+     * @param reserve Резерв
+     * @return составной первичный ключ
+     */
+    @Override
+    public ReserveId insert(Reserve reserve) {
+        validate(reserve);
+        try (EntityManagerFactory factory = createEntityManagerFactory("climbers")) {
+            try (EntityManager manager = factory.createEntityManager()) {
+                manager.getTransaction().begin();
+                manager.persist(reserve);
+                manager.getTransaction().commit();
+                logger.info("вы добавлены в резерв");
+                return reserve.getReserveId();
+            }
+        }
     }
 }

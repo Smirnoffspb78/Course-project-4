@@ -71,7 +71,7 @@ CREATE TABLE tb_reserve(
 --Записи о совершенных походах
 CREATE TABLE IF NOT EXISTS tb_records_climbing(
 id SERIAL PRIMARY KEY,
-group_climbers_id INT NOT NULL,
+group_climbers_id INT NOT NULL unique ,
 start DATE NOT NULL,
 finish DATE NOT NULL,
 count_climbers INTEGER NOT NULL,

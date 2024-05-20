@@ -2,11 +2,13 @@ package com.smirnov.climbers;
 
 import com.smirnov.climbers.beans.Climber;
 import com.smirnov.climbers.beans.Country;
-import com.smirnov.climbers.beans.GroupClimbers;
 import com.smirnov.climbers.beans.RecordClimbing;
-import com.smirnov.climbers.daobean.*;
-
-import java.time.LocalDate;
+import com.smirnov.climbers.beans.ReserveId;
+import com.smirnov.climbers.daobean.ClimbersDao;
+import com.smirnov.climbers.daobean.CountriesDao;
+import com.smirnov.climbers.daobean.GroupClimbersDao;
+import com.smirnov.climbers.daobean.RecordsDao;
+import com.smirnov.climbers.daobean.ReserveDao;
 
 public class Main {
     public static void main(String[] args) {
@@ -33,7 +35,6 @@ public class Main {
         //climbersDao.insert(climber);
 
         //Извлечение альпиниста по ID
-
         //Climber climber1get = climbersDao.selectById(3L);
         /*System.out.println(climber1get.getId());
         System.out.println(climber1get.getFirstName());
@@ -41,10 +42,13 @@ public class Main {
         System.out.println(climber1get.getEmail());
         System.out.println(climber1get.getNumberPhone());*/
 
+
+        //Добавление альпиниста в резерв через закрытую группу
+        groupClimbersDao.addClimberInGroup("climbers", "climbers", 5, 4);
 //Создание записи о совершенном походе
         RecordClimbing record= new RecordClimbing();
         RecordsDao recordsDao = new RecordsDao("climbers");
-        /*GroupClimbers groupClimbers=new GroupClimbersDao("climbers").selectById(3);
+       /* GroupClimbers groupClimbers=new GroupClimbersDao("climbers").findById(1);
         record.setGroupClimbers(groupClimbers);
         record.setFinish(groupClimbers.getFinish());
         record.setStart(groupClimbers.getStart());
@@ -52,28 +56,12 @@ public class Main {
         recordsDao.insert(record);*/
         //Извлечение записи по ключу
         //System.out.println(recordsDao.selectById(4));
-
-
-        ////////////////////////////РЕЗУЛЬТАТЫ ТЕСТОВЫХ ЗАПРОСОВ///////////////////////////////
-        System.out.println("Список групп, которые открыты");
-        System.out.println(groupClimbersDao.getGroupClimbersIsOpen());
-
-
-
-        System.out.println("Список названий гор, где количество покоривших ее больше заданного значения");
-        MountainsDao mountainsDao=new MountainsDao("climbers");
-        System.out.println(mountainsDao.mountainsWithClimber(4));
-
-        System.out.println("Отсортированный список альпинистов, которые не осуществляли походы за последний год");
-        System.out.println(climbersDao.climbersSortSecondNameNotClimbingInLastYear(20));
-
-
-        System.out.println("Идентификаторы групп по ФИО руководителя, где количество покоривших гору больше определенного значени");
-        SupervisorDao supervisorDao=new SupervisorDao("climbers");
-        System.out.println(supervisorDao.getGroupByFSS("Алексей", "Соболев", "Игоревич", 1));
-
-        System.out.println("Походы, которые осуществлялись в заданный период времени");
-        System.out.println( recordsDao.recordsClimbingPeriod(10, LocalDate.now().minusMonths(1), LocalDate.now()));
+        //Извлечение резерва по ключу
+        ReserveDao reserveDao=new ReserveDao("climbers");
+        ReserveId reserveId=new ReserveId();
+        reserveId.setClimber(climbersDao.findById(1L));
+        reserveId.setGroupClimbers(groupClimbersDao.findById(4));
+        System.out.println("Резерв по Id \n"+ reserveDao.findById(reserveId));
     }
 
 }

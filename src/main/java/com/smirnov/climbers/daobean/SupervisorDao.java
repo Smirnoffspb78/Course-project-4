@@ -4,11 +4,9 @@ import com.smirnov.climbers.NullPointerOrIllegalArgumentException;
 import com.smirnov.climbers.beans.Supervisor;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-import static com.smirnov.climbers.ValidateObjects.validId;
 import static com.smirnov.climbers.ValidateObjects.validate;
 import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_ID_GROUP_BY_SUPERVISOR;
 import static jakarta.persistence.Persistence.createEntityManagerFactory;
@@ -27,8 +25,10 @@ public class SupervisorDao extends Dao<Long, Supervisor> {
      * @return Руководитель
      */
     @Override
-    Supervisor findById(Long id) {
-        validId(id);
+    public Supervisor findById(Long id) {
+        if (isNull(id) || id < 1) {
+            throw new NullPointerOrIllegalArgumentException("id не должен быть null и должен быть положительным");
+        }
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();
@@ -38,7 +38,7 @@ public class SupervisorDao extends Dao<Long, Supervisor> {
     }
 
     @Override
-    public Long insert(@NotNull Supervisor supervisor) {
+    public Long insert(Supervisor supervisor) {
         validate(supervisor);
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
@@ -68,7 +68,7 @@ public class SupervisorDao extends Dao<Long, Supervisor> {
         }
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
-                return manager.createQuery(GET_ID_GROUP_BY_SUPERVISOR, Integer.class)
+                return manager.createNativeQuery(GET_ID_GROUP_BY_SUPERVISOR, Integer.class)
                         .setParameter(1, name)
                         .setParameter(2, lastName)
                         .setParameter(3, surname)

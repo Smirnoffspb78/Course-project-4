@@ -1,6 +1,14 @@
 package com.smirnov.climbers.beans;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -27,12 +35,19 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @ToString
 public class GroupClimbers {
     /**
-     * Идентификатор группы.
+     * Идентификатор записи.
      */
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @EqualsAndHashCode.Include
     private int id;
+
+    /**
+     * Номер группы.
+     */
+    @Positive(message = "Номер группы должен быть положительным")
+    @Column(name = "number_group", nullable = false)
+    private int numberGroup;
     /**
      * Гора.
      */
@@ -43,7 +58,7 @@ public class GroupClimbers {
     /**
      * Дата следующего похода.
      */
-    @NotNull (message = "start mountain не должно быть null")
+    @NotNull(message = "start mountain не должно быть null")
     @Column(name = "start_date")
     @FutureOrPresent(message = "Дата старта восхождения не может быть в прошлом")
     private LocalDate start;
@@ -67,7 +82,7 @@ public class GroupClimbers {
     /**
      * Стоимость.
      */
-    @Positive (message = "price должно быть положительным")
+    @Positive(message = "price должно быть положительным")
     @Column(name = "price", nullable = false)
     private double price;
     /**
@@ -80,7 +95,7 @@ public class GroupClimbers {
     /**
      * Массив для записи альпинистов.
      */
-    @NotNull (message = "climbers не должно быть null")
+    @NotNull(message = "climbers не должно быть null")
     @ManyToMany(fetch = EAGER)
     @JoinTable(name = "tb_climber_group_climbers",
             joinColumns = @JoinColumn(name = "group_climbers_id"),
