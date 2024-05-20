@@ -60,7 +60,7 @@ public class SupervisorDao extends Dao<Long, Supervisor> {
     public List<Integer> getGroupByFSS(String name, String lastName, String surname, int count) {
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
-                return manager.createQuery(GET_ID_GROUP_BY_SUPERVISOR.getQuerySQL(), Integer.class)
+                return manager.createQuery(GET_ID_GROUP_BY_SUPERVISOR, Integer.class)
                         .setParameter(1, name)
                         .setParameter(2, lastName)
                         .setParameter(3, surname)

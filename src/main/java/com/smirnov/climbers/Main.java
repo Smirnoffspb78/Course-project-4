@@ -5,13 +5,8 @@ import com.smirnov.climbers.beans.Country;
 import com.smirnov.climbers.beans.GroupClimbers;
 import com.smirnov.climbers.beans.RecordClimbing;
 import com.smirnov.climbers.daobean.*;
-import jakarta.persistence.Temporal;
 
 import java.time.LocalDate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static jakarta.persistence.Persistence.createEntityManagerFactory;
 
 public class Main {
     public static void main(String[] args) {

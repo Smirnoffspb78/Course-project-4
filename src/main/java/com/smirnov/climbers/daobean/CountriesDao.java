@@ -41,7 +41,7 @@ public class CountriesDao extends Dao<String, Country> {
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();
-                manager.persist(country);//добавляет информацию об объекте в таблицу
+                manager.persist(country);
                 manager.getTransaction().commit();
             }
         }

@@ -47,7 +47,6 @@ public class ClimbersDao extends Dao<Long, Climber> {
      */
     public Long insert(@NotNull Climber climber) {
         validate(climber);
-        //super.insert()
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();
@@ -71,7 +70,7 @@ public class ClimbersDao extends Dao<Long, Climber> {
         }
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
-                List<Tuple> nativeQuery = manager.createNativeQuery(GET_SECOND_NAME_AND_EMAIL_CLIMBER.getQuerySQL(), Tuple.class)
+                List<Tuple> nativeQuery = manager.createNativeQuery(GET_SECOND_NAME_AND_EMAIL_CLIMBER, Tuple.class)
                         .setParameter(1, now().minusYears(1))
                         .getResultList();
                 List<Map<String, String>> secondNamesAndEmails = new ArrayList<>();

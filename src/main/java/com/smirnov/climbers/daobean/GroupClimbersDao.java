@@ -2,7 +2,6 @@ package com.smirnov.climbers.daobean;
 
 import com.smirnov.climbers.beans.Climber;
 import com.smirnov.climbers.beans.GroupClimbers;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.validation.constraints.NotNull;
@@ -12,14 +11,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static com.smirnov.climbers.ValidateObjects.validate;
-import static com.smirnov.climbers.daobean.QueriesClimberClub.*;
+import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_CLIMBING_CLIMBER_FOR_PERIOD;
+import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_GROUP_OPEN_RECORD;
 import static jakarta.persistence.Persistence.createEntityManagerFactory;
-
 import static java.time.LocalDate.now;
 import static java.util.logging.Logger.getLogger;
-
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
     private final Logger logger = getLogger(GroupClimbersDao.class.getName());
 
@@ -72,7 +68,7 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();
-                return manager.createQuery(GET_GROUP_OPEN_RECORD.getQuerySQL(), GroupClimbers.class).getResultList();
+                return manager.createQuery(GET_GROUP_OPEN_RECORD, GroupClimbers.class).getResultList();
             }
         }
     }
@@ -103,7 +99,7 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
         }
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
-                List<String> query = manager.createNativeQuery(GET_CLIMBING_CLIMBER_FOR_PERIOD.getQuerySQL(), String.class)
+                List<String> query = manager.createNativeQuery(GET_CLIMBING_CLIMBER_FOR_PERIOD, String.class)
                         .setParameter(1, idClimber)
                         .setParameter(2, groupClimbers.getStart())
                         .setParameter(3, groupClimbers.getFinish())
@@ -124,7 +120,6 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
         }
     }
 
-    @Scheduled(cron = "0 0 0 * * ?")
     public void updateStatus() {
         List<GroupClimbers> currentList = getGroupClimbersIsOpen();
         if (!currentList.isEmpty()) {

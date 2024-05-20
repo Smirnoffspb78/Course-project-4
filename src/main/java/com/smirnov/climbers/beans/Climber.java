@@ -43,7 +43,7 @@ public class Climber {
      * Имя.
      */
     @NotBlank(message = "firstName не должно быть null и иметь хотя бы один не пробельный символ")
-    @Pattern(regexp = "^[A-Z][a-z]{0,199}$|^[А-Я][а-я]{0,199}$|",
+    @Pattern(regexp = "^[A-Z][a-z]{0,199}$|^[А-Я][а-я]{0,199}$",
     message = "Имя должно начинаться с заглавной латинской или русской буквы, остальные символы должны быть подстрочные буквы")
     @Column(name = "first_name", nullable = false, length = 200)
     private String firstName;
@@ -51,7 +51,7 @@ public class Climber {
      * Фамилия.
      */
     @NotBlank(message = "secondName не должно быть null и иметь хотя бы один не пробельный символ")
-    @Pattern(regexp = "^[A-Z][a-z]{0,199}$|^[А-Я][а-я]{0,199}$|",
+    @Pattern(regexp = "^[A-Z][a-z]{0,199}$|^[А-Я][а-я]{0,199}$",
             message = "Фамилия должна начинаться с заглавной латинской или русской буквы остальные символы должны быть подстрочные буквы")
     @Column(name = "last_name", nullable = false, length = 200)
     private String lastName;

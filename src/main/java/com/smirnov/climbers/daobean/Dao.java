@@ -20,7 +20,7 @@ public abstract class Dao<T, E> {
      * Конструктор задает базовые параметры для Dao классов
      * @param nameEntityManager Имя Entity Manager.
      */
-    protected Dao(String nameEntityManager) {
+    protected Dao(@NotBlank String nameEntityManager) {
         validate(nameEntityManager);
         this.nameEntityManager = nameEntityManager;
     }

@@ -3,10 +3,8 @@ package com.smirnov.climbers.daobean;
 import com.smirnov.climbers.beans.RecordClimbing;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.TypedQuery;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.smirnov.climbers.ValidateObjects.validate;
@@ -73,7 +71,7 @@ public class RecordsDao extends Dao<Integer, RecordClimbing> {
         }
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
-                return manager.createQuery(GET_RECORD_CLIMBING_BY_INTERVAL.getQuerySQL(), RecordClimbing.class)
+                return manager.createQuery(GET_RECORD_CLIMBING_BY_INTERVAL, RecordClimbing.class)
                         .setParameter(1, finish)
                         .setParameter(2, start)
                         .setParameter(3, finish)

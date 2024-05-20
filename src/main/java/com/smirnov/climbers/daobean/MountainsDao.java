@@ -3,8 +3,8 @@ package com.smirnov.climbers.daobean;
 import com.smirnov.climbers.beans.Mountain;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Query;
 import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 import static com.smirnov.climbers.ValidateObjects.validate;
@@ -59,7 +59,7 @@ public class MountainsDao extends Dao<Integer, Mountain> {
     public List<String> mountainsWithClimber(long countClimbers) {
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
-                return manager.createNativeQuery(GET_MOUNTAIN_NAME_AND_COUNT_CLIMBER.getQuerySQL(), String.class)
+                return manager.createNativeQuery(GET_MOUNTAIN_NAME_AND_COUNT_CLIMBER, String.class)
                         .setParameter(1, countClimbers)
                         .getResultList();
             }
