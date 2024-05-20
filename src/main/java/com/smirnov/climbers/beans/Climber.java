@@ -62,19 +62,4 @@ public class Climber {
     @Column(name = "email", nullable = false, length = 200)
     private String email;
 
-    public void setNumberPhone(@NotBlank String numberPhone) {
-        try {
-            parseLong(numberPhone);
-        } catch (NumberFormatException nfe) {
-            throw new NumberFormatException("Телефон должен состоять только из цифр");
-        }
-        if (numberPhone.replaceAll("\\W", "").length()!=11 || numberPhone.length() != 11) {
-            throw new IllegalArgumentException("Длина номер телефона должна составлять 11 символов и не содержать других символов");
-        }
-        this.numberPhone = numberPhone;
-    }
-
-    public void setEmail(@NotBlank String email) {
-        this.email = email;
-    }
 }
