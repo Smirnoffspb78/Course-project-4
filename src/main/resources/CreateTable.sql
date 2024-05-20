@@ -1,10 +1,10 @@
 --Альпинисты
 CREATE TABLE IF NOT EXISTS tb_climbers(
-id BIGSERIAL PRIMARY KEY,
-first_name VARCHAR(200) NOT NULL,
-last_name VARCHAR(200) NOT NULL,
-number_phone varchar(11) NOT NULL UNIQUE,
-email VARCHAR(200) NOT NULL
+    id BIGSERIAL PRIMARY KEY,
+    first_name VARCHAR(200) NOT NULL,
+    last_name VARCHAR(200) NOT NULL,
+    number_phone varchar(11) NOT NULL UNIQUE,
+    email VARCHAR(200) NOT NULL
 );
 
 --Страны
@@ -14,18 +14,18 @@ CREATE TABLE IF NOT EXISTS tb_countries(
 
 --Горы
 CREATE TABLE IF NOT EXISTS tb_mountains(
-id SERIAL PRIMARY KEY ,
+    id SERIAL PRIMARY KEY ,
 	mountain_name VARCHAR(150) NOT NULL,
 	height REAL NOT NULL CHECK(height>=100)
 );
 
 --Связь многие ко многим Горы-Страны
 CREATE TABLE IF NOT EXISTS tb_mountain_country(
-country_id VARCHAR(100),
-mountain_id INTEGER,
-PRIMARY KEY (country_id, mountain_id),
-FOREIGN KEY(country_id) REFERENCES tb_countries(country),
-FOREIGN KEY(mountain_id) REFERENCES tb_mountains(id)
+    country_id VARCHAR(100),
+    mountain_id INTEGER,
+    PRIMARY KEY (country_id, mountain_id),
+    FOREIGN KEY(country_id) REFERENCES tb_countries(country),
+    FOREIGN KEY(mountain_id) REFERENCES tb_mountains(id)
 );
 
 --Руководители
@@ -46,6 +46,7 @@ id SERIAL PRIMARY KEY,
 	is_open BOOLEAN NOT NULL DEFAULT true,
 	price REAL NOT NULL CHECK (price>0),
 	supervisor_id BIGINT NOT NULL,
+	number_group INT NOT NULL,
 	FOREIGN KEY (mountain_id) REFERENCES tb_mountains(id),
 	FOREIGN KEY (supervisor_id) REFERENCES tb_supervisors(id)
 );
@@ -61,20 +62,20 @@ CREATE TABLE IF NOT EXISTS tb_climber_group_climbers(
 
 --Резерв (выражается через связь многие ко многим) - один альпинист не может несколько раз попасть в резерв на одну гору
 CREATE TABLE tb_reserve(
-        group_climbers_id INT not null,
-        climber_id BIGINT not null,
-        primary key (climber_id, group_climbers_id),
+    group_climbers_id INT not null,
+    climber_id BIGINT not null,
+    primary key (climber_id, group_climbers_id),
 	FOREIGN KEY (climber_id) REFERENCES tb_climbers(id),
 	FOREIGN KEY (group_climbers_id) REFERENCES tb_groups_climbers(id)
 );
 
 --Записи о совершенных походах
 CREATE TABLE IF NOT EXISTS tb_records_climbing(
-id SERIAL PRIMARY KEY,
-group_climbers_id INT NOT NULL unique ,
-start DATE NOT NULL,
-finish DATE NOT NULL,
-count_climbers INTEGER NOT NULL,
-FOREIGN KEY (group_climbers_id) REFERENCES tb_groups_climbers(id)
+    id SERIAL PRIMARY KEY,
+    group_climbers_id INT NOT NULL unique ,
+    start DATE NOT NULL,
+    finish DATE NOT NULL,
+    count_climbers INTEGER NOT NULL,
+    FOREIGN KEY (group_climbers_id) REFERENCES tb_groups_climbers(id)
 );
 
