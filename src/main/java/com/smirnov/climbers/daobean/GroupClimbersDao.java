@@ -1,5 +1,6 @@
 package com.smirnov.climbers.daobean;
 
+import com.smirnov.climbers.NullPointerOrIllegalArgumentException;
 import com.smirnov.climbers.beans.Climber;
 import com.smirnov.climbers.beans.GroupClimbers;
 import jakarta.persistence.EntityManager;
@@ -10,11 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static com.smirnov.climbers.ValidateObjects.validId;
 import static com.smirnov.climbers.ValidateObjects.validate;
 import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_CLIMBING_CLIMBER_FOR_PERIOD;
 import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_GROUP_OPEN_RECORD;
 import static jakarta.persistence.Persistence.createEntityManagerFactory;
 import static java.time.LocalDate.now;
+import static java.util.Objects.isNull;
 import static java.util.logging.Logger.getLogger;
 public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
     private final Logger logger = getLogger(GroupClimbersDao.class.getName());
@@ -30,8 +33,8 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
      * @return Альпинист
      */
     @Override
-    public GroupClimbers findById(@NotNull Integer id) {
-        validate(id);
+    public GroupClimbers findById(Integer id) {
+        validId(id);
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();

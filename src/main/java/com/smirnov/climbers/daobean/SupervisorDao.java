@@ -1,5 +1,6 @@
 package com.smirnov.climbers.daobean;
 
+import com.smirnov.climbers.NullPointerOrIllegalArgumentException;
 import com.smirnov.climbers.beans.Supervisor;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -7,9 +8,11 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
+import static com.smirnov.climbers.ValidateObjects.validId;
 import static com.smirnov.climbers.ValidateObjects.validate;
 import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_ID_GROUP_BY_SUPERVISOR;
 import static jakarta.persistence.Persistence.createEntityManagerFactory;
+import static java.util.Objects.isNull;
 
 public class SupervisorDao extends Dao<Long, Supervisor> {
 
@@ -24,8 +27,8 @@ public class SupervisorDao extends Dao<Long, Supervisor> {
      * @return Руководитель
      */
     @Override
-    Supervisor findById(@NotNull Long id) {
-        validate(id);
+    Supervisor findById(Long id) {
+        validId(id);
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();
@@ -58,6 +61,11 @@ public class SupervisorDao extends Dao<Long, Supervisor> {
      * @return Список групп.
      */
     public List<Integer> getGroupByFSS(String name, String lastName, String surname, int count) {
+        if (isNull(name) || isNull(lastName) || isNull(surname) ||
+                name.isBlank() || lastName.isBlank() || surname.isBlank() || count < 1) {
+            throw new NullPointerOrIllegalArgumentException("name, last name, surname не должны быть null " +
+                    "и иметь хотя бы один не пробельный символ. Count должен быть положительным");
+        }
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 return manager.createQuery(GET_ID_GROUP_BY_SUPERVISOR, Integer.class)

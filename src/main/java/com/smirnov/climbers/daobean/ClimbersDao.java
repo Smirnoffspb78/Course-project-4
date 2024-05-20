@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.smirnov.climbers.ValidateObjects.validId;
 import static com.smirnov.climbers.ValidateObjects.validate;
 import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_SECOND_NAME_AND_EMAIL_CLIMBER;
 import static jakarta.persistence.Persistence.createEntityManagerFactory;
 import static java.time.LocalDate.now;
+
 
 
 public class ClimbersDao extends Dao<Long, Climber> {
@@ -29,8 +31,8 @@ public class ClimbersDao extends Dao<Long, Climber> {
      * @return Альпинист
      */
     @Override
-    public Climber findById(@NotNull Long id) {
-        validate(id);
+    public Climber findById(Long id) {
+        validId(id);
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();

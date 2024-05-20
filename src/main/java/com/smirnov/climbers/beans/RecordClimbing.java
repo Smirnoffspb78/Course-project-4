@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Positive;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -48,12 +49,14 @@ public class RecordClimbing {
      */
     @NotNull(message = "start не должен быть null")
     @Column(name = "start", nullable = false)
+    @Past(message = "start должен быть в прошлом")
     private LocalDate start;
     /**
      * Дата окончания восхождения.
      */
     @NotNull(message = "finish не должен быть null")
     @Column(name = "finish", nullable = false)
+    @Past(message = "finish должен быть в прошлом")
     private LocalDate finish;
 
     /**

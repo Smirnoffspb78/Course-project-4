@@ -3,10 +3,12 @@ package com.smirnov.climbers.daobean;
 import com.smirnov.climbers.beans.RecordClimbing;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.smirnov.climbers.ValidateObjects.validId;
 import static com.smirnov.climbers.ValidateObjects.validate;
 import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_RECORD_CLIMBING_BY_INTERVAL;
 import static jakarta.persistence.Persistence.createEntityManagerFactory;
@@ -27,6 +29,7 @@ public class RecordsDao extends Dao<Integer, RecordClimbing> {
      */
     @Override
     public RecordClimbing findById(Integer id) {
+        validId(id);
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();
@@ -42,7 +45,7 @@ public class RecordsDao extends Dao<Integer, RecordClimbing> {
      * @return true/false если запись добавлена успешно/не успешно
      */
     @Override
-    public Integer insert(RecordClimbing recordClimbing) { //Реализация обекта на базе ID должна лежать внутри класса
+    public Integer insert(@NotNull RecordClimbing recordClimbing) { //Реализация обекта на базе ID должна лежать внутри класса
         validate(recordClimbing);
         if (!recordClimbing.getGroupClimbers().getFinish().isAfter(now())) {
             throw new IllegalArgumentException("Поход еще не закончился");

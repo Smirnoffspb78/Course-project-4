@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
+import static com.smirnov.climbers.ValidateObjects.validId;
 import static com.smirnov.climbers.ValidateObjects.validate;
 import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_MOUNTAIN_NAME_AND_COUNT_CLIMBER;
 import static jakarta.persistence.Persistence.createEntityManagerFactory;
@@ -24,8 +25,8 @@ public class MountainsDao extends Dao<Integer, Mountain> {
      * @return Альпинист
      */
     @Override
-    public Mountain findById(@NotNull Integer id) {
-        validate(id);
+    public Mountain findById(Integer id) {
+        validId(id);
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();

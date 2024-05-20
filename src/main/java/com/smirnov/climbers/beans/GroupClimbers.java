@@ -1,6 +1,7 @@
 package com.smirnov.climbers.beans;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.EqualsAndHashCode;
@@ -44,7 +45,14 @@ public class GroupClimbers {
      */
     @NotNull (message = "start mountain не должно быть null")
     @Column(name = "start_date")
+    @FutureOrPresent(message = "Дата старта восхождения не может быть в прошлом")
     private LocalDate start;
+    /**
+     * Дата окончания восхождения.
+     */
+    @NotNull(message = "finish не должно быть null")
+    @Column(name = "finish_date", nullable = false)
+    private LocalDate finish;
     /**
      * Максимальное количество человек в группе.
      */
@@ -79,10 +87,5 @@ public class GroupClimbers {
             inverseJoinColumns = @JoinColumn(name = "climber_id")
     )
     private Set<@NotNull Climber> climbers = new HashSet<>();
-    /**
-     * Дата окончания восхождения.
-     */
-    @NotNull(message = "finish не должно быть null")
-    @Column(name = "finish_date", nullable = false)
-    private LocalDate finish;
+
 }

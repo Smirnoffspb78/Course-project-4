@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import static jakarta.validation.Validation.buildDefaultValidatorFactory;
+import static java.util.Objects.isNull;
 import static java.util.logging.Logger.getLogger;
 
 /**
@@ -26,6 +27,11 @@ public class ValidateObjects {
                 violations.forEach(violation -> LOGGER.warning(violation.getMessage()));
                 throw new ValidationException("Объект имеет невалидные значения.");
             }
+        }
+    }
+    public  static <T extends Number> void validId(T id){
+        if (isNull(id) || (Long)id<1){
+            throw new NullPointerOrIllegalArgumentException("id не должен быть null и должен быть положительным");
         }
     }
 }

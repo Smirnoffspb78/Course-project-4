@@ -3,6 +3,7 @@ package com.smirnov.climbers.daobean;
 import com.smirnov.climbers.beans.Country;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import static com.smirnov.climbers.ValidateObjects.validate;
@@ -20,7 +21,7 @@ public class CountriesDao extends Dao<String, Country> {
      * @return Альпинист
      */
     @Override
-    public Country findById(@NotNull String name) {
+    public Country findById(@NotEmpty String name) {
         validate(name);
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
