@@ -11,7 +11,9 @@ import static com.smirnov.climbers.ValidateObjects.validate;
 import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_MOUNTAIN_NAME_AND_COUNT_CLIMBER;
 import static jakarta.persistence.Persistence.createEntityManagerFactory;
 import static java.util.Objects.isNull;
-/** Содержит методы для взаимодействия объекта Mountain с базой данных
+
+/**
+ * Содержит методы для взаимодействия объекта Mountain с базой данных
  */
 public class MountainsDao extends Dao<Integer, Mountain> {
 

@@ -40,7 +40,7 @@ public class ReserveDao extends Dao<ReserveId, Reserve> {
     public Reserve createReserveByGroupAndClimber(GroupClimbers groupClimbers, Climber climber) {
         validate(groupClimbers);
         validate(climber);
-        Reserve reserve=new Reserve();
+        Reserve reserve = new Reserve();
         reserve.setReserveId(new ReserveId(groupClimbers, climber));
         return reserve;
     }

@@ -22,13 +22,13 @@ class GroupClimbersDaoTest {
     @Test
     void addClimberInGroup_IAE_for_idClimbers() {
         assertThrows(IllegalArgumentException.class,
-                ()->groupClimbersDao.addClimberInGroup("climbers", "climbers", -1, 1));
+                () -> groupClimbersDao.addClimberInGroup("climbers", "climbers", -1, 1));
     }
 
     @Test
     void addClimberInGroup_IAE_for_idGroup() {
         assertThrows(IllegalArgumentException.class,
-                ()->groupClimbersDao.addClimberInGroup("climbers", "climbers", 1, 0));
+                () -> groupClimbersDao.addClimberInGroup("climbers", "climbers", 1, 0));
     }
 
     @Test

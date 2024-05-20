@@ -47,15 +47,15 @@ public final class QueriesClimberClub {
      * По ФИО руководителя выводит идентификаторы групп, где количество покоривших гору больше заданного значения.
      */
     public static final String GET_ID_GROUP_BY_SUPERVISOR = """
-           SELECT tb_groups_climbers.id
-           FROM tb_groups_climbers
-           JOIN tb_supervisors ON tb_supervisors.id=tb_groups_climbers.supervisor_id
-           JOIN tb_records_climbing ON tb_records_climbing.group_climbers_id=tb_groups_climbers.id
-           WHERE first_name ILIKE ?
-           AND last_name ILIKE ?
-           AND surname ILIKE ?
-           AND tb_records_climbing.count_climbers > ?
-           """;
+            SELECT tb_groups_climbers.id
+            FROM tb_groups_climbers
+            JOIN tb_supervisors ON tb_supervisors.id=tb_groups_climbers.supervisor_id
+            JOIN tb_records_climbing ON tb_records_climbing.group_climbers_id=tb_groups_climbers.id
+            WHERE first_name ILIKE ?
+            AND last_name ILIKE ?
+            AND surname ILIKE ?
+            AND tb_records_climbing.count_climbers > ?
+            """;
 
     /**
      * Возвращает список восхождений, которые осуществлялись в заданный период времени.

@@ -11,18 +11,18 @@ class MountainsDaoTest {
 
     @Test
     void mountainsWithClimber_Alps() {
-        List<String> mountains=List.of("Альпы");
+        List<String> mountains = List.of("Альпы");
         assertEquals(mountains, mountainsDao.mountainsWithClimber(5));
     }
 
     @Test
     void mountainsWithClimber_Empty() {
-        List<String> mountains=List.of();
+        List<String> mountains = List.of();
         assertEquals(mountains, mountainsDao.mountainsWithClimber(6));
     }
 
     @Test
     void mountainsWithClimber_ThrowIAE() {
-        assertThrows(IllegalArgumentException.class, ()->mountainsDao.mountainsWithClimber(-1));
+        assertThrows(IllegalArgumentException.class, () -> mountainsDao.mountainsWithClimber(-1));
     }
 }
