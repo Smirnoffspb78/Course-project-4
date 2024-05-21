@@ -17,6 +17,13 @@ class ClimbersDaoTest {
 
     @Test
     void findById() {
+        Climber climber = new Climber();
+        climber.setId(9);
+        climber.setFirstName("Василий");
+        climber.setLastName("Васильев");
+        climber.setEmail("vasilev@mail.ru");
+        climber.setNumberPhone("80981235903");
+        assertEquals(climber, climbersDao.findById(9L));
     }
 
     @Test

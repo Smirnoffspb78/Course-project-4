@@ -57,6 +57,9 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
     @Override
     public Integer insert(GroupClimbers groupClimbers) {
         validate(groupClimbers);
+        if (groupClimbers.getFinish().isBefore(groupClimbers.getStart())) {
+            throw new IllegalArgumentException("Начало похода должно быть раньше или совпадать с датой финиша");
+        }
         try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
             try (EntityManager manager = factory.createEntityManager()) {
                 manager.getTransaction().begin();
