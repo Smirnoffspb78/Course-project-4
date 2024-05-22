@@ -10,6 +10,7 @@ import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static com.smirnov.climbers.ValidateObjects.validate;
 import static com.smirnov.climbers.daobean.QueriesClimberClub.GET_CLIMBING_CLIMBER_FOR_PERIOD;
@@ -140,19 +141,19 @@ public class GroupClimbersDao extends Dao<Integer, GroupClimbers> {
         }
     }
 
+    /**
+     * Обновляет статус группы открыта/закрыта
+     */
     public void updateStatus() {
         List<GroupClimbers> currentList = getGroupClimbersIsOpen();
         if (!currentList.isEmpty()) {
-            List<GroupClimbers> updateList = new ArrayList<>();
-            currentList.stream().filter(groupClimbers -> !groupClimbers.getStart().isAfter(now()))
-                    .forEach(groupClimbers -> {
-                        groupClimbers.setOpen(false);
-                        updateList.add(groupClimbers);
-                    });
             try (EntityManagerFactory factory = createEntityManagerFactory(getNameEntityManager())) {
                 try (EntityManager manager = factory.createEntityManager()) {
                     manager.getTransaction().begin();
-                    updateList.forEach(manager::merge);
+                    currentList.stream()
+                            .filter(groupClimbers -> !groupClimbers.getStart().isAfter(now()))
+                            .collect(Collectors.toList())
+                            .forEach(manager::merge);
                     manager.getTransaction().commit();
                 }
             }
